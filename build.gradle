@@ -25,22 +25,6 @@ tasks.register('fatJar', Jar) {
 
 tasks.fatJar.dependsOn(tasks.sourcesJar, tasks.jar)
 
-// Args and syntax are the same for compiler and vm
-def args = [
-        "--add-exports", "reflection.hacks.core/reflection.hacks.internal.access=reflection.hacks.test",
-        "--add-exports", "reflection.hacks.core/reflection.hacks.internal.injector=reflection.hacks.test",
-        "--add-exports", "reflection.hacks.core/reflection.hacks.internal.util=reflection.hacks.test",
-        "--add-exports", "reflection.hacks.core/reflection.hacks.internal.util.function=reflection.hacks.test"
-]
-
-tasks.compileTestJava {
-    options.compilerArgs += args
-}
-
-tasks.withType(Test).configureEach {
-    it.jvmArgs += args
-}
-
 dependencies {
     implementation 'org.jetbrains:annotations:24.0.0'
     implementation 'org.ow2.asm:asm:9.5'
