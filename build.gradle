@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+}
+
+group = 'me.lollopollqo'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    withSourcesJar()
+}
+
+tasks.register('fatJar', Jar) {
+    archiveBaseName = rootProject.name
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+tasks.fatJar.dependsOn(tasks.sourcesJar, tasks.jar)
+
+// Args and syntax are the same for compiler and vm
+def args = [
+        "--add-exports", "reflection.hacks.core/reflection.hacks.internal.access=reflection.hacks.test",
+        "--add-exports", "reflection.hacks.core/reflection.hacks.internal.injector=reflection.hacks.test",
+        "--add-exports", "reflection.hacks.core/reflection.hacks.internal.util=reflection.hacks.test",
+        "--add-exports", "reflection.hacks.core/reflection.hacks.internal.util.function=reflection.hacks.test"
+]
+
+tasks.compileTestJava {
+    options.compilerArgs += args
+}
+
+tasks.withType(Test).configureEach {
+    it.jvmArgs += args
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:24.0.0'
+    implementation 'org.ow2.asm:asm:9.5'
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
