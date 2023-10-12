@@ -97,20 +97,20 @@ public final class AccessibleObjects {
      * Forces the given {@link AccessibleObject}s to be accessible.
      *
      * @param objects The objects to be made accessible
-     * @see AccessibleObjects#setAccessible(AccessibleObject[], boolean)
+     * @see AccessibleObjects#setAccessible(boolean, AccessibleObject...)
      */
-    public static void setAccessible(final @NotNull AccessibleObject @NotNull [] objects) {
-        AccessibleObjects.setAccessible(objects, true);
+    public static void setAccessible(final @NotNull AccessibleObject @NotNull ... objects) {
+        AccessibleObjects.setAccessible(true, objects);
     }
 
     /**
      * Forces the given {@link AccessibleObject}s to have the desired accessibility
      *
-     * @param objects    The objects whose accessibility is to be forcefully set
      * @param accessible The accessibility to be forcefully set
+     * @param objects    The objects whose accessibility is to be forcefully set
      * @see AccessibleObjects#setAccessible(AccessibleObject, boolean)
      */
-    public static void setAccessible(final @NotNull AccessibleObject @NotNull [] objects, final boolean accessible) {
+    public static void setAccessible(final boolean accessible, final @NotNull AccessibleObject @NotNull ... objects) {
         for (AccessibleObject object : objects) {
             AccessibleObjects.setAccessible(object, accessible);
         }
