@@ -3,6 +3,7 @@ package reflection.hacks.api.reflect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import reflection.hacks.api.invoke.Handles;
+import reflection.hacks.internal.util.Lazy;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.AccessibleObject;
@@ -12,35 +13,39 @@ import java.util.stream.Stream;
 public final class AccessibleObjects {
 
     /**
-     * Cached {@link MethodHandle} with {@code invokespecial} behavior for {@link AccessibleObject#setAccessible(boolean)}
+     * Lazily ached {@link MethodHandle} with {@code invokespecial} behavior for {@link AccessibleObject#setAccessible(boolean)}
      *
      * @see AccessibleObjects#setAccessible(boolean, AccessibleObject)
      */
     @NotNull
-    private static final MethodHandle SET_ACCESSIBLE_MH;
+    private static final Lazy<MethodHandle> SET_ACCESSIBLE_MH;
 
     /**
-     * Cached {@link MethodHandle} for {@link AccessibleObject#getRoot()}
+     * Lazily cached {@link MethodHandle} for {@link AccessibleObject#getRoot()}
      *
      * @see AccessibleObjects#getRoot(AccessibleObject)
      */
     @NotNull
-    private static final MethodHandle GET_ROOT_MH;
+    private static final Lazy<MethodHandle> GET_ROOT_MH;
 
     static {
 
-        SET_ACCESSIBLE_MH = Handles.findSpecial(
-                AccessibleObject.class,
-                "setAccessible",
-                AccessibleObject.class,
-                void.class,
-                boolean.class
+        SET_ACCESSIBLE_MH = Lazy.of(
+                () -> Handles.findSpecial(
+                        AccessibleObject.class,
+                        "setAccessible",
+                        AccessibleObject.class,
+                        void.class,
+                        boolean.class
+                )
         );
 
-        GET_ROOT_MH = Handles.findVirtual(
-                AccessibleObject.class,
-                "getRoot",
-                AccessibleObject.class
+        GET_ROOT_MH = Lazy.of(
+                () -> Handles.findVirtual(
+                        AccessibleObject.class,
+                        "getRoot",
+                        AccessibleObject.class
+                )
         );
 
     }
@@ -133,7 +138,8 @@ public final class AccessibleObjects {
      * @see AccessibleObject#setAccessible(boolean)
      */
     public static void setAccessible(final boolean accessible, final @NotNull AccessibleObject object) {
-        Handles.invoke(AccessibleObjects.SET_ACCESSIBLE_MH, object, accessible);
+        // noinspection DataFlowIssue
+        Handles.invoke(AccessibleObjects.SET_ACCESSIBLE_MH.get(), object, accessible);
     }
 
     /**
@@ -145,7 +151,8 @@ public final class AccessibleObjects {
      */
     @Nullable
     public static <T extends AccessibleObject> T getRoot(final @NotNull T object) {
-        return Handles.invoke(AccessibleObjects.GET_ROOT_MH, object);
+        // noinspection DataFlowIssue
+        return Handles.invoke(AccessibleObjects.GET_ROOT_MH.get(), object);
     }
 
     /**
