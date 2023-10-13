@@ -46,22 +46,4 @@ public interface ThrowingExecutable<T extends @Nullable Object> {
         }
     }
 
-    /**
-     * Executes the given {@link ThrowingExecutable} {@code executable} and returns the value produced by the execution,
-     * re-throwing any {@link Throwable} {@code t} thrown by {@code executable} without forcing the caller of this method to handle it,
-     * even if {@code t} is a checked exception.
-     *
-     * @param executable The {@link ThrowingExecutable} to execute
-     * @param <T>        The type of the value returned by the {@code executable}
-     * @return the value returned from the {@code executable}'s {@link ThrowingExecutable#execute() execute()} method
-     */
-    @Nullable
-    static <T extends @Nullable Object> T executeNullable(final @NotNull ThrowingExecutable<T> executable) {
-        try {
-            return executable.execute();
-        } catch (Throwable t) {
-            throw Throwables.sneakyThrow(t);
-        }
-    }
-
 }

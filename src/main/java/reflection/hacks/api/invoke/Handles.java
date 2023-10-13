@@ -458,7 +458,7 @@ public final class Handles {
      */
     public static <T> T invoke(final @NotNull MethodHandle handle, final @Nullable Object... args) {
         return Classes.unchecked(
-                ThrowingExecutable.executeNullable(
+                ThrowingExecutable.execute(
                         () -> handle.invokeWithArguments(args)
                 )
         );
