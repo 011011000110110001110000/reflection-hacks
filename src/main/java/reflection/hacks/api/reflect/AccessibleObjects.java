@@ -52,9 +52,7 @@ public final class AccessibleObjects {
      * @see AccessibleObjects#setAccessible(boolean, Collection)
      */
     public static void setAccessible(final @NotNull Stream<? extends @NotNull AccessibleObject> objects) {
-        objects.forEach(
-                AccessibleObjects::setAccessible
-        );
+        AccessibleObjects.setAccessible(true, objects);
     }
 
     /**
