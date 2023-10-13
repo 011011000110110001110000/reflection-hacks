@@ -16,7 +16,7 @@ import java.util.function.Supplier;
  * @version 1.0
  * @since 1.0
  */
-public class Lazy<T extends @Nullable Object> implements Supplier<T> {
+public class Lazy<T> implements Supplier<T> {
 
     /**
      * Cached {@link Supplier} instance that throws an exception when asked for its value
@@ -44,7 +44,6 @@ public class Lazy<T extends @Nullable Object> implements Supplier<T> {
     /**
      * The value held by this {@link Lazy} instance
      */
-    @Nullable
     private volatile Object value;
 
     /**
@@ -65,7 +64,7 @@ public class Lazy<T extends @Nullable Object> implements Supplier<T> {
      * @param value         The initial value held by this {@link Lazy} instance
      * @param valueSupplier The {@link Supplier} that will provide the value
      */
-    private Lazy(final @Nullable Object value, final @NotNull Supplier<T> valueSupplier) {
+    private Lazy(final Object value, final @NotNull Supplier<T> valueSupplier) {
         this.value = value;
         this.valueSupplier = valueSupplier;
 
@@ -92,7 +91,7 @@ public class Lazy<T extends @Nullable Object> implements Supplier<T> {
      * @see Lazy#isInitialized()
      */
     @SuppressWarnings("unchecked")
-    private Lazy(final @Nullable T value) {
+    private Lazy(final T value) {
         // Avoid allocating a new Supplier<T> each time
         // since it will never be used anyway
         this(value, Lazy.NO_SUPPLIER);
@@ -105,7 +104,6 @@ public class Lazy<T extends @Nullable Object> implements Supplier<T> {
      * @return the value held by this instance
      * @see Lazy#isInitialized()
      */
-    @Nullable
     @SuppressWarnings("unchecked")
     public T get() {
         if (this.value == Lazy.NO_VALUE) {

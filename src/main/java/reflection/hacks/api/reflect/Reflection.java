@@ -95,7 +95,6 @@ public final class Reflection {
     public static void clearReflectionCache(final @NotNull Class<?> clazz) {
         // noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (clazz) {
-            // noinspection DataFlowIssue
             Reflection.REFLECTION_CACHE.get().set(clazz, null);
         }
     }
@@ -155,7 +154,6 @@ public final class Reflection {
                 if (originalFieldFilterMap.containsKey(clazz)) {
                     newFieldFilterMap = new HashMap<>(originalFieldFilterMap);
                     newFieldFilterMap.remove(clazz);
-                    // noinspection DataFlowIssue
                     Reflection.FIELD_FILTER_MAP.get().setVolatile(newFieldFilterMap);
                 }
             }
@@ -170,7 +168,6 @@ public final class Reflection {
                 if (originalMethodFilterMap.containsKey(clazz)) {
                     newMethodFilterMap = new HashMap<>(originalMethodFilterMap);
                     newMethodFilterMap.remove(clazz);
-                    // noinspection DataFlowIssue
                     Reflection.METHOD_FILTER_MAP.get().setVolatile(newMethodFilterMap);
                 }
             }
@@ -183,7 +180,6 @@ public final class Reflection {
      * @return a reference to the {@code fieldFilterMap}
      */
     public static Map<Class<?>, Set<String>> getFieldFilterMap() {
-        // noinspection DataFlowIssue
         return Classes.unchecked(Reflection.FIELD_FILTER_MAP.get().getVolatile());
     }
 
@@ -193,7 +189,6 @@ public final class Reflection {
      * @return a reference to the {@code methodFilterMap}
      */
     public static Map<Class<?>, Set<String>> getMethodFilterMap() {
-        // noinspection DataFlowIssue
         return Classes.unchecked(Reflection.METHOD_FILTER_MAP.get().getVolatile());
     }
 

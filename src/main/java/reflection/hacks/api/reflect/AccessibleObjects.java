@@ -138,7 +138,6 @@ public final class AccessibleObjects {
      * @see AccessibleObject#setAccessible(boolean)
      */
     public static void setAccessible(final boolean accessible, final @NotNull AccessibleObject object) {
-        // noinspection DataFlowIssue
         Handles.invoke(AccessibleObjects.SET_ACCESSIBLE_MH.get(), object, accessible);
     }
 
@@ -151,7 +150,6 @@ public final class AccessibleObjects {
      */
     @Nullable
     public static <T extends AccessibleObject> T getRoot(final @NotNull T object) {
-        // noinspection DataFlowIssue
         return Handles.invoke(AccessibleObjects.GET_ROOT_MH.get(), object);
     }
 
