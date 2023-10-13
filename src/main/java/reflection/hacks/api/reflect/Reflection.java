@@ -3,6 +3,7 @@ package reflection.hacks.api.reflect;
 import org.jetbrains.annotations.NotNull;
 import reflection.hacks.api.invoke.Handles;
 import reflection.hacks.internal.util.CompatHelper;
+import reflection.hacks.internal.util.Lazy;
 import reflection.hacks.internal.util.function.ThrowingExecutable;
 
 import java.lang.invoke.VarHandle;
@@ -28,31 +29,31 @@ public final class Reflection {
     public static final StackWalker STACK_WALKER;
 
     /**
-     * Cached {@link VarHandle} for the cached reflection data of a {@link Class}
+     * Lazily cached {@link VarHandle} for the cached reflection data of a {@link Class}
      *
      * @see #clearReflectionCache(Class)
      */
-    private static final VarHandle REFLECTION_CACHE;
+    private static final Lazy<VarHandle> REFLECTION_CACHE;
 
     /**
-     * Cached {@link VarHandle} for {@link jdk.internal.reflect.Reflection#fieldFilterMap}
+     * Lazily cached {@link VarHandle} for {@link jdk.internal.reflect.Reflection#fieldFilterMap}
      *
      * @see #unregisterFilters(Class)
      */
-    private static final VarHandle FIELD_FILTER_MAP;
+    private static final Lazy<VarHandle> FIELD_FILTER_MAP;
 
     /**
-     * Cached {@link VarHandle} for {@link jdk.internal.reflect.Reflection#methodFilterMap}
+     * Lazily cached {@link VarHandle} for {@link jdk.internal.reflect.Reflection#methodFilterMap}
      *
      * @see #unregisterFilters(Class)
      */
-    private static final VarHandle METHOD_FILTER_MAP;
+    private static final Lazy<VarHandle> METHOD_FILTER_MAP;
 
     static {
 
         STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
 
-        REFLECTION_CACHE = CompatHelper.reflectionCacheHandle();
+        REFLECTION_CACHE = Lazy.of(CompatHelper::reflectionCacheHandle);
 
         final String reflectionClassName = "jdk.internal.reflect.Reflection";
         final String fieldFilterMap = "fieldFilterMap";
@@ -64,8 +65,12 @@ public final class Reflection {
         );
 
 
-        FIELD_FILTER_MAP = Handles.findStaticVarHandle(reflectionClass, fieldFilterMap, Map.class);
-        METHOD_FILTER_MAP = Handles.findStaticVarHandle(reflectionClass, methodFilterMap, Map.class);
+        FIELD_FILTER_MAP = Lazy.of(
+                () -> Handles.findStaticVarHandle(reflectionClass, fieldFilterMap, Map.class)
+        );
+        METHOD_FILTER_MAP = Lazy.of(
+                () -> Handles.findStaticVarHandle(reflectionClass, methodFilterMap, Map.class)
+        );
 
     }
 
@@ -90,7 +95,8 @@ public final class Reflection {
     public static void clearReflectionCache(final @NotNull Class<?> clazz) {
         // noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (clazz) {
-            Reflection.REFLECTION_CACHE.set(clazz, null);
+            // noinspection DataFlowIssue
+            Reflection.REFLECTION_CACHE.get().set(clazz, null);
         }
     }
 
@@ -149,7 +155,8 @@ public final class Reflection {
                 if (originalFieldFilterMap.containsKey(clazz)) {
                     newFieldFilterMap = new HashMap<>(originalFieldFilterMap);
                     newFieldFilterMap.remove(clazz);
-                    Reflection.FIELD_FILTER_MAP.setVolatile(newFieldFilterMap);
+                    // noinspection DataFlowIssue
+                    Reflection.FIELD_FILTER_MAP.get().setVolatile(newFieldFilterMap);
                 }
             }
         }
@@ -163,7 +170,8 @@ public final class Reflection {
                 if (originalMethodFilterMap.containsKey(clazz)) {
                     newMethodFilterMap = new HashMap<>(originalMethodFilterMap);
                     newMethodFilterMap.remove(clazz);
-                    Reflection.METHOD_FILTER_MAP.setVolatile(newMethodFilterMap);
+                    // noinspection DataFlowIssue
+                    Reflection.METHOD_FILTER_MAP.get().setVolatile(newMethodFilterMap);
                 }
             }
         }
@@ -175,7 +183,8 @@ public final class Reflection {
      * @return a reference to the {@code fieldFilterMap}
      */
     public static Map<Class<?>, Set<String>> getFieldFilterMap() {
-        return Classes.unchecked(Reflection.FIELD_FILTER_MAP.getVolatile());
+        // noinspection DataFlowIssue
+        return Classes.unchecked(Reflection.FIELD_FILTER_MAP.get().getVolatile());
     }
 
     /**
@@ -184,7 +193,8 @@ public final class Reflection {
      * @return a reference to the {@code methodFilterMap}
      */
     public static Map<Class<?>, Set<String>> getMethodFilterMap() {
-        return Classes.unchecked(Reflection.METHOD_FILTER_MAP.getVolatile());
+        // noinspection DataFlowIssue
+        return Classes.unchecked(Reflection.METHOD_FILTER_MAP.get().getVolatile());
     }
 
     /**
