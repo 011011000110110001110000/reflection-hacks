@@ -49,7 +49,7 @@ public final class AccessibleObjects {
      * Forces the given {@link AccessibleObject}s to be accessible.
      *
      * @param objects The objects to be made accessible
-     * @see AccessibleObjects#setAccessible(boolean, Collection)
+     * @see AccessibleObjects#setAccessible(boolean, Stream)
      */
     public static void setAccessible(final @NotNull Stream<? extends @NotNull AccessibleObject> objects) {
         AccessibleObjects.setAccessible(true, objects);
