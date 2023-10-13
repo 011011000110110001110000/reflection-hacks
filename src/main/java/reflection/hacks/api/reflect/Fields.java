@@ -269,7 +269,6 @@ public final class Fields {
      * @return an array containing the {@link Field}s declared by class {@code owner}
      */
     public static @NotNull Field @NotNull [] getDirect(final @NotNull Class<?> owner) {
-        // noinspection DataFlowIssue
         return Handles.invoke(Fields.NATIVE_GET_DECLARED_FIELDS_MH.get(), owner);
     }
 

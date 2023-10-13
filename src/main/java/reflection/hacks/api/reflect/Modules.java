@@ -262,7 +262,6 @@ public final class Modules {
     @Contract("_ -> new")
     @NotNull
     public static ModuleLayer.Controller getControllerForLayer(final @NotNull ModuleLayer layer) {
-        // noinspection DataFlowIssue
         return Handles.invoke(LAYER_CONTROLLER_CONSTRUCTOR_MH, layer);
     }
 

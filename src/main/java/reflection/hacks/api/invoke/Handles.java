@@ -444,7 +444,7 @@ public final class Handles {
         );
 
         // Invoke the handle outside the lambda for clarity
-        return Handles.invoke(handle);
+        return Handles.invoke(handle, arguments);
     }
 
     /**
@@ -456,8 +456,7 @@ public final class Handles {
      * @param <T>    The return type of the method
      * @return the value returned from the invocation of the given {@code handle}, cast to the appropriate type {@code T}
      */
-    @Nullable
-    public static <T extends @Nullable Object> T invoke(final @NotNull MethodHandle handle, final @Nullable Object... args) {
+    public static <T> T invoke(final @NotNull MethodHandle handle, final @Nullable Object... args) {
         return Classes.unchecked(
                 ThrowingExecutable.executeNullable(
                         () -> handle.invokeWithArguments(args)

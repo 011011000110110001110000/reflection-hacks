@@ -407,7 +407,6 @@ public final class Methods {
      * @return an array containing the {@link Method}s declared by class {@code owner}
      */
     public static @NotNull Method @NotNull [] getDirect(final @NotNull Class<?> owner) {
-        // noinspection DataFlowIssue
         return Handles.invoke(NATIVE_GET_DECLARED_METHODS_MH.get(), owner);
     }
 

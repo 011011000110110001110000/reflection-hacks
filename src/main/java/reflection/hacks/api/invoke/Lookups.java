@@ -104,7 +104,6 @@ public final class Lookups {
      */
     @NotNull
     public static MethodHandles.Lookup newLookup(final @NotNull Class<?> lookupClass, final @Nullable Class<?> previousLookupClass, final int lookupModes) {
-        // noinspection DataFlowIssue
         return Handles.invoke(LOOKUP_CONSTRUCTOR_MH, lookupClass, previousLookupClass, lookupModes);
     }
 
