@@ -38,8 +38,7 @@ public interface ThrowingExecutable<T extends @Nullable Object> {
      * @return the value returned from the {@code executable}'s {@link ThrowingExecutable#execute() execute()} method
      * @throws NullPointerException if the value returned by {@code executable} is {@code null}
      */
-    @NotNull
-    static <T extends @NotNull Object> T execute(final @NotNull ThrowingExecutable<T> executable) {
+    static <T> T execute(final @NotNull ThrowingExecutable<T> executable) {
         try {
             return Objects.requireNonNull(executable.execute(), "execution result cannot be null");
         } catch (Throwable t) {
