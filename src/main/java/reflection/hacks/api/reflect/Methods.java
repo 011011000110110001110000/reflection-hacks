@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import reflection.hacks.api.invoke.Handles;
 import reflection.hacks.internal.util.CompatHelper;
+import reflection.hacks.internal.util.Lazy;
 import reflection.hacks.internal.util.Throwables;
 import reflection.hacks.internal.util.function.ThrowingExecutable;
 
@@ -24,14 +25,14 @@ import java.util.List;
 public final class Methods {
 
     /**
-     * Cached {@link MethodHandle} for the native method that retrieves the declared {@link Method}s of a {@link Class}
+     * Lazily cached {@link MethodHandle} for the native method that retrieves the declared {@link Method}s of a {@link Class}
      */
     @NotNull
-    private static final MethodHandle NATIVE_GET_DECLARED_METHODS_MH;
+    private static final Lazy<MethodHandle> NATIVE_GET_DECLARED_METHODS_MH;
 
     static {
 
-        NATIVE_GET_DECLARED_METHODS_MH = CompatHelper.nativeDeclaredMethodRetriever();
+        NATIVE_GET_DECLARED_METHODS_MH = Lazy.of(CompatHelper::nativeDeclaredMethodRetriever);
 
     }
 
@@ -407,7 +408,7 @@ public final class Methods {
      */
     public static @NotNull Method @NotNull [] getDirect(final @NotNull Class<?> owner) {
         // noinspection DataFlowIssue
-        return Handles.invoke(NATIVE_GET_DECLARED_METHODS_MH, owner);
+        return Handles.invoke(NATIVE_GET_DECLARED_METHODS_MH.get(), owner);
     }
 
     /**
