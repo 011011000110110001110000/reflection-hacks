@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 public final class AccessibleObjects {
 
     /**
-     * Lazily ached {@link MethodHandle} with {@code invokespecial} behavior for {@link AccessibleObject#setAccessible(boolean)}
+     * Lazily cached {@link MethodHandle} with {@code invokespecial} behavior for {@link AccessibleObject#setAccessible(boolean)}
      *
      * @see AccessibleObjects#setAccessible(boolean, AccessibleObject)
      */
