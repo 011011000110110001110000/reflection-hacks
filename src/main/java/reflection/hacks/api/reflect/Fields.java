@@ -3,6 +3,7 @@ package reflection.hacks.api.reflect;
 import org.jetbrains.annotations.NotNull;
 import reflection.hacks.api.invoke.Handles;
 import reflection.hacks.internal.util.CompatHelper;
+import reflection.hacks.internal.util.Lazy;
 import reflection.hacks.internal.util.Throwables;
 import reflection.hacks.internal.util.function.ThrowingExecutable;
 
@@ -20,14 +21,14 @@ import java.lang.reflect.Field;
 public final class Fields {
 
     /**
-     * Cached {@link MethodHandle} for the native method that retrieves the declared {@link Field}s of a {@link Class}
+     * Lazily cached {@link MethodHandle} for the native method that retrieves the declared {@link Field}s of a {@link Class}
      */
     @NotNull
-    private static final MethodHandle NATIVE_GET_DECLARED_FIELDS_MH;
+    private static final Lazy<MethodHandle> NATIVE_GET_DECLARED_FIELDS_MH;
 
     static {
 
-        NATIVE_GET_DECLARED_FIELDS_MH = CompatHelper.nativeDeclaredFieldRetriever();
+        NATIVE_GET_DECLARED_FIELDS_MH = Lazy.of(CompatHelper::nativeDeclaredFieldRetriever);
 
     }
 
@@ -269,7 +270,7 @@ public final class Fields {
      */
     public static @NotNull Field @NotNull [] getDirect(final @NotNull Class<?> owner) {
         // noinspection DataFlowIssue
-        return Handles.invoke(Fields.NATIVE_GET_DECLARED_FIELDS_MH, owner);
+        return Handles.invoke(Fields.NATIVE_GET_DECLARED_FIELDS_MH.get(), owner);
     }
 
     /**
