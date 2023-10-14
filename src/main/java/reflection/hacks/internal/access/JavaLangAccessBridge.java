@@ -261,4 +261,5 @@ public final class JavaLangAccessBridge {
     private JavaLangAccessBridge() {
         throw new UnsupportedOperationException(Classes.moduleInclusiveName(JavaLangAccessBridge.class) + " cannot be instantiated");
     }
+
 }
