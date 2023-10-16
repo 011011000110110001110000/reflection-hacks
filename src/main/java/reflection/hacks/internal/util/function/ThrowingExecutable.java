@@ -4,8 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import reflection.hacks.internal.util.Throwables;
 
-import java.util.Objects;
-
 /**
  * Represents a generic portion of code that can return a value and throw {@link Throwable}s.
  * <p>
@@ -40,7 +38,7 @@ public interface ThrowingExecutable<T extends @Nullable Object> {
      */
     static <T> T execute(final @NotNull ThrowingExecutable<T> executable) {
         try {
-            return Objects.requireNonNull(executable.execute(), "execution result cannot be null");
+            return executable.execute();
         } catch (Throwable t) {
             throw Throwables.sneakyThrow(t);
         }
