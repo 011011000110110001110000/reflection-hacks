@@ -11,10 +11,10 @@ import reflection.hacks.internal.util.function.ThrowingExecutable;
  * <p>
  * The source of the generated class is as follows:
  * <blockquote><pre>{@code
- * public class Injector {
+ * public class Injected {
  *     static {
- *         final Class<?> injectorClass = Injector.class;
- *         final Class<?> loaderClass = injectorClass.getClassLoader().getClass();
+ *         final Class<?> injectedClass = Injected.class;
+ *         final Class<?> loaderClass = injectedClass.getClassLoader().getClass();
  *         final Module javaBaseModule = Object.class.getModule();
  *         final Module loaderModule = loaderClass.getModule();
  *         // Obtain the jdk.internal.access.JavaLangAccess instance via jdk.internal.access.SharedSecrets
@@ -26,7 +26,7 @@ import reflection.hacks.internal.util.function.ThrowingExecutable;
  * }
  * }</pre></blockquote>
  * <p>
- * In conjunction with {@link Loader}, this is used to define and load a class inside a proxy module which has access to the {@link jdk.internal.access} package.
+ * This is used to define and load a class inside a proxy module which has access to the {@link jdk.internal.access} package.
  *
  * @author <a href=https://github.com/011011000110110001110000>011011000110110001110000</a>
  * @version 1.0
@@ -242,7 +242,7 @@ public final class Injector {
             );
 
             methodVisitor.visitLocalVariable(
-                    "injectorClass",
+                    "injectedClass",
                     "Ljava/lang/Class;",
                     "Ljava/lang/Class<*>;",
                     l1,
