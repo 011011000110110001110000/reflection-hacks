@@ -25,7 +25,7 @@ java {
 }
 
 shadowJar {
-    archiveClassifier = ''
+    archiveClassifier = 'shadow-jar'
     relocate 'org.objectweb.asm', 'lib.org.objectweb.asm'
 }
 
@@ -34,6 +34,10 @@ shadowJar.dependsOn(tasks.sourcesJar)
 publishing {
     publications {
         shadow(MavenPublication) {
+            from components.java
+        }
+
+        jar(MavenPublication) {
             from components.java
         }
     }
