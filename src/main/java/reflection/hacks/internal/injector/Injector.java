@@ -1,7 +1,10 @@
 package reflection.hacks.internal.injector;
 
 import org.jetbrains.annotations.NotNull;
-import org.objectweb.asm.*;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import reflection.hacks.api.reflect.Classes;
 import reflection.hacks.internal.access.JavaLangAccessBridge;
 import reflection.hacks.internal.util.function.ThrowingExecutable;
@@ -74,9 +77,6 @@ public final class Injector {
 
             methodVisitor.visitCode();
 
-            final Label l0 = new Label();
-            methodVisitor.visitLabel(l0);
-
             methodVisitor.visitVarInsn(
                     Opcodes.ALOAD,
                     0
@@ -90,18 +90,6 @@ public final class Injector {
             );
             methodVisitor.visitInsn(
                     Opcodes.RETURN
-            );
-
-            final Label l1 = new Label();
-            methodVisitor.visitLabel(l1);
-
-            methodVisitor.visitLocalVariable(
-                    "this",
-                    injectorClassDescriptor,
-                    null,
-                    l0,
-                    l1,
-                    0
             );
 
             methodVisitor.visitMaxs(1, 1);
@@ -121,9 +109,6 @@ public final class Injector {
 
             methodVisitor.visitCode();
 
-            final Label l0 = new Label();
-            methodVisitor.visitLabel(l0);
-
             methodVisitor.visitLdcInsn(
                     Type.getType(injectorClassDescriptor)
             );
@@ -131,10 +116,6 @@ public final class Injector {
                     Opcodes.ASTORE,
                     0
             );
-
-            final Label l1 = new Label();
-            methodVisitor.visitLabel(l1);
-
             methodVisitor.visitVarInsn(
                     Opcodes.ALOAD,
                     0
@@ -154,11 +135,8 @@ public final class Injector {
                     false
             );
             methodVisitor.visitVarInsn(
-                    Opcodes.ASTORE, 1);
-
-            final Label l2 = new Label();
-            methodVisitor.visitLabel(l2);
-
+                    Opcodes.ASTORE, 1
+            );
             methodVisitor.visitLdcInsn(
                     Type.getType("Ljava/lang/Object;")
             );
@@ -173,10 +151,6 @@ public final class Injector {
                     Opcodes.ASTORE,
                     2
             );
-
-            final Label l3 = new Label();
-            methodVisitor.visitLabel(l3);
-
             methodVisitor.visitVarInsn(
                     Opcodes.ALOAD,
                     1
@@ -193,9 +167,6 @@ public final class Injector {
                     3
             );
 
-            final Label l4 = new Label();
-            methodVisitor.visitLabel(l4);
-
             methodVisitor.visitMethodInsn(
                     Opcodes.INVOKESTATIC,
                     "jdk/internal/access/SharedSecrets",
@@ -207,10 +178,6 @@ public final class Injector {
                     Opcodes.ASTORE,
                     4
             );
-
-            final Label l5 = new Label();
-            methodVisitor.visitLabel(l5);
-
             methodVisitor.visitVarInsn(
                     Opcodes.ALOAD,
                     4
@@ -233,53 +200,8 @@ public final class Injector {
                     "(Ljava/lang/Module;Ljava/lang/String;Ljava/lang/Module;)V",
                     true
             );
-
-            final Label l6 = new Label();
-            methodVisitor.visitLabel(l6);
-
             methodVisitor.visitInsn(
                     Opcodes.RETURN
-            );
-
-            methodVisitor.visitLocalVariable(
-                    "injectedClass",
-                    "Ljava/lang/Class;",
-                    "Ljava/lang/Class<*>;",
-                    l1,
-                    l6,
-                    0
-            );
-            methodVisitor.visitLocalVariable(
-                    "loaderClass",
-                    "Ljava/lang/Class;",
-                    "Ljava/lang/Class<*>;",
-                    l2,
-                    l6,
-                    1
-            );
-            methodVisitor.visitLocalVariable(
-                    "javaBaseModule",
-                    "Ljava/lang/Module;",
-                    null,
-                    l3,
-                    l6,
-                    2
-            );
-            methodVisitor.visitLocalVariable(
-                    "loaderModule",
-                    "Ljava/lang/Module;",
-                    null,
-                    l4,
-                    l6,
-                    3
-            );
-            methodVisitor.visitLocalVariable(
-                    "javaLangAccess",
-                    "Ljdk/internal/access/JavaLangAccess;",
-                    null,
-                    l5,
-                    l6,
-                    4
             );
 
             methodVisitor.visitMaxs(4, 5);
