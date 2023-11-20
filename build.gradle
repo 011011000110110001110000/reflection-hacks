@@ -54,3 +54,79 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+tasks.register('testSupportedVersions', Test) {
+    group 'verification'
+    doFirst {
+        println 'Running tests on all supported JDK versions'
+    }
+}
+
+LinkedHashMap<JvmVendorSpec, JvmImplementation> vendors = [:]
+
+vendors[JvmVendorSpec.ADOPTIUM] = JvmImplementation.VENDOR_SPECIFIC
+vendors[JvmVendorSpec.ADOPTOPENJDK] = JvmImplementation.VENDOR_SPECIFIC
+vendors[JvmVendorSpec.AMAZON] = JvmImplementation.VENDOR_SPECIFIC
+vendors[JvmVendorSpec.AZUL] = JvmImplementation.VENDOR_SPECIFIC
+vendors[JvmVendorSpec.BELLSOFT] = JvmImplementation.VENDOR_SPECIFIC
+vendors[JvmVendorSpec.IBM] = JvmImplementation.J9
+vendors[JvmVendorSpec.MICROSOFT] = JvmImplementation.VENDOR_SPECIFIC
+vendors[JvmVendorSpec.ORACLE] = JvmImplementation.VENDOR_SPECIFIC
+vendors[JvmVendorSpec.SAP] = JvmImplementation.VENDOR_SPECIFIC
+
+def versionRange = (17..21)
+
+vendors.forEach {
+    jvmVendorSpec, jvmImplementation ->
+        versionRange.each {
+            majorVersion ->
+                def javaLauncherProvider = javaToolchains.launcherFor {
+                    languageVersion = JavaLanguageVersion.of(majorVersion)
+                    vendor = jvmVendorSpec
+                    implementation = jvmImplementation
+                }
+                def taskName = "testJDK${majorVersion}_${jvmVendorSpec}"
+                def javaLauncher
+                def versionSpecificTask
+                try {
+                    javaLauncher = javaLauncherProvider.get()
+                    versionSpecificTask = tasks.register(taskName, Test) {
+                        executable = javaLauncher.executablePath
+
+                        description = "Runs the test suite on JDK ${majorVersion} for vendor ${jvmVendorSpec}"
+                        group = LifecycleBasePlugin.VERIFICATION_GROUP
+
+                        def testTask = tasks.test
+                        classpath = testTask.classpath
+                        testClassesDirs = testTask.testClassesDirs
+                        version = majorVersion
+
+                        useJUnitPlatform()
+                        testLogging {
+                            events "PASSED", "SKIPPED", "FAILED", "STANDARD_OUT", "STANDARD_ERROR"
+                        }
+
+                        doFirst {
+                            println "Running test suite on JDK ${majorVersion} for vendor ${jvmVendorSpec}"
+                        }
+                    }
+                } catch (e) {
+                    versionSpecificTask = tasks.register(taskName, Test) {
+                        onlyIf {
+                            println "Skipping tests on JDK ${majorVersion} for vendor ${jvmVendorSpec}:\n${e.message}"
+                            false
+                        }
+                    }
+                }
+
+                tasks.testSupportedVersions.finalizedBy {
+                    versionSpecificTask
+                }
+        }
+}
+
+tasks.withType(Test).configureEach {
+    dependsOn {
+        tasks.named("clean${name.capitalize()}")
+    }
+}

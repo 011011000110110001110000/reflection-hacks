@@ -8,13 +8,13 @@ import java.lang.reflect.Method;
 
 public class MainTest {
     @Test
-    @SuppressWarnings({"rawtypes", "deprecation", "unused"})
+    @SuppressWarnings({"deprecation", "unused"})
     void testMainFunctionality() {
         Classes.ensureInitialized(sun.misc.Unsafe.class);
 
         final Field rootClassLoader = Fields.findDirectAccessible(Class.class, "classLoader");
         final Method rootGetUnsafe = Methods.findDirectAccessible(sun.misc.Unsafe.class, "getUnsafe");
-        final Constructor<Class> rootClassConstructor = Constructors.findAccessibleRoot(Class.class);
+        final Constructor<Void> rootVoidConstructor = Constructors.findAccessibleRoot(Void.class);
 
         Assertions.assertTrue(rootClassLoader.isAccessible());
         Assertions.assertNull(AccessibleObjects.getRoot(rootClassLoader));
@@ -22,8 +22,8 @@ public class MainTest {
         Assertions.assertTrue(rootGetUnsafe.isAccessible());
         Assertions.assertNull(AccessibleObjects.getRoot(rootGetUnsafe));
 
-        Assertions.assertTrue(rootClassConstructor.isAccessible());
-        Assertions.assertNull(AccessibleObjects.getRoot(rootClassConstructor));
+        Assertions.assertTrue(rootVoidConstructor.isAccessible());
+        Assertions.assertNull(AccessibleObjects.getRoot(rootVoidConstructor));
 
         Assertions.assertThrowsExactly(
                 NoSuchFieldException.class,
@@ -44,15 +44,15 @@ public class MainTest {
         Assertions.assertNotNull(AccessibleObjects.getRoot(classLoaderUnfiltered));
         Assertions.assertNotNull(AccessibleObjects.getRoot(getUnsafeUnfiltered));
 
-        final Constructor<Class> classConstructor = Constructors.find(Class.class);
+        final Constructor<Void> voidConstructor = Constructors.find(Void.class);
 
         Assertions.assertFalse(classLoader.trySetAccessible());
-        Assertions.assertFalse(classConstructor.trySetAccessible());
+        Assertions.assertFalse(voidConstructor.trySetAccessible());
 
-        AccessibleObjects.setAccessible(classLoader, classConstructor);
+        AccessibleObjects.setAccessible(classLoader, voidConstructor);
 
         Assertions.assertTrue(classLoader.isAccessible());
-        Assertions.assertTrue(classConstructor.isAccessible());
+        Assertions.assertTrue(voidConstructor.isAccessible());
 
     }
 
