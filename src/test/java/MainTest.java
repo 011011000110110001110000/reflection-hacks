@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import reflection.hacks.api.reflect.*;
 
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -10,6 +11,17 @@ public class MainTest {
     @Test
     @SuppressWarnings({"deprecation", "unused"})
     void testMainFunctionality() {
+        final Class<?> JavaLangAccess = Classes.load("jdk.internal.access.JavaLangAccess");
+        Assertions.assertThrowsExactly(
+                IllegalAccessException.class,
+                () -> MethodHandles.lookup().in(JavaLangAccess).ensureInitialized(JavaLangAccess)
+        );
+        Assertions.assertThrowsExactly(
+                IllegalAccessException.class,
+                () -> MethodHandles.lookup().ensureInitialized(JavaLangAccess)
+        );
+        Classes.ensureInitialized(JavaLangAccess);
+
         Classes.ensureInitialized(sun.misc.Unsafe.class);
 
         final Field rootClassLoader = Fields.findDirectAccessible(Class.class, "classLoader");
