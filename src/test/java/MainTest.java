@@ -66,6 +66,17 @@ public class MainTest {
         Assertions.assertTrue(classLoader.isAccessible());
         Assertions.assertTrue(voidConstructor.isAccessible());
 
+        final Module javaInstrumentModule = ModuleLayer.boot().findModule("java.instrument").orElseThrow();
+        final Module testModule = MainTest.class.getModule();
+
+        Assertions.assertFalse(javaInstrumentModule.isOpen("java.lang.instrument", testModule));
+        Modules.addOpens(javaInstrumentModule, "java.lang.instrument", testModule);
+        Assertions.assertTrue(javaInstrumentModule.isOpen("java.lang.instrument", testModule));
+
+        Assertions.assertFalse(javaInstrumentModule.isOpen("java.lang.instrument"));
+        Modules.addOpens(javaInstrumentModule, "java.lang.instrument");
+        Assertions.assertTrue(javaInstrumentModule.isOpen("java.lang.instrument"));
+
     }
 
 }

@@ -9,7 +9,6 @@ import reflection.hacks.internal.util.Throwables;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 
 /**
  * This class provides an API for performing operations on {@link Module}s such as {@linkplain Modules#addExports(Module, String, Module) exporting} and
@@ -45,20 +44,13 @@ public final class Modules {
         // AccessibleObject#setAccessible(boolean) on members of the package.
         JavaLangAccessBridge.addOpens(Object.class.getModule(), Object.class.getPackageName(), Modules.class.getModule());
 
-        final MethodHandles.Lookup lookup = MethodHandles.lookup();
-
         try {
             final Constructor<ModuleLayer.Controller> controllerConstructor = ModuleLayer.Controller.class.getDeclaredConstructor(ModuleLayer.class);
-            final Field allUnnamedModuleField = Module.class.getDeclaredField("ALL_UNNAMED_MODULE");
-            final Field everyoneModuleField = Module.class.getDeclaredField("EVERYONE_MODULE");
+            final MethodHandles.Lookup privateModuleLookup = MethodHandles.privateLookupIn(Module.class, MethodHandles.lookup());
 
-            controllerConstructor.setAccessible(true);
-            allUnnamedModuleField.setAccessible(true);
-            everyoneModuleField.setAccessible(true);
-
-            LAYER_CONTROLLER_CONSTRUCTOR_MH = lookup.unreflectConstructor(controllerConstructor);
-            ALL_UNNAMED_MODULE = Classes.unchecked(allUnnamedModuleField.get(null));
-            EVERYONE_MODULE = Classes.unchecked(everyoneModuleField.get(null));
+            LAYER_CONTROLLER_CONSTRUCTOR_MH = privateModuleLookup.unreflectConstructor(controllerConstructor);
+            ALL_UNNAMED_MODULE = (Module) privateModuleLookup.findStaticGetter(Module.class, "ALL_UNNAMED_MODULE", Module.class).invokeExact();
+            EVERYONE_MODULE = (Module) privateModuleLookup.findStaticGetter(Module.class, "EVERYONE_MODULE", Module.class).invokeExact();
         } catch (Throwable t) {
             throw Throwables.sneakyThrow(t);
         }
