@@ -65,7 +65,6 @@ tasks.register('testSupportedVersions', Test) {
 LinkedHashMap<JvmVendorSpec, JvmImplementation> vendors = [:]
 
 vendors[JvmVendorSpec.ADOPTIUM] = JvmImplementation.VENDOR_SPECIFIC
-vendors[JvmVendorSpec.ADOPTOPENJDK] = JvmImplementation.VENDOR_SPECIFIC
 vendors[JvmVendorSpec.AMAZON] = JvmImplementation.VENDOR_SPECIFIC
 vendors[JvmVendorSpec.AZUL] = JvmImplementation.VENDOR_SPECIFIC
 vendors[JvmVendorSpec.BELLSOFT] = JvmImplementation.VENDOR_SPECIFIC
