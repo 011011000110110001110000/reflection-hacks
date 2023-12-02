@@ -448,6 +448,41 @@ public final class Handles {
     }
 
     /**
+     * Invokes the static method with the given name, parameter types and return type declared by class {@code owner}.
+     *
+     * @param owner         The class that declares the method
+     * @param name          The name of the method
+     * @param returnType    The return type of the method
+     * @param argumentTypes The argument types of the method
+     * @param arguments     The arguments to use when invoking the method
+     * @param <T>           The return type of the method
+     * @return the value returned by the method, cast to the appropriate type
+     * @see #invokeStatic(Class, String, MethodType, Object...)
+     */
+    @Nullable
+    public static <T> T invokeStatic(final @NotNull Class<?> owner, final @NotNull String name, final @NotNull Class<T> returnType, final @NotNull Class<?>[] argumentTypes, final @Nullable Object... arguments) {
+        return Classes.unchecked(Handles.invokeStatic(owner, name, MethodType.methodType(returnType, argumentTypes), arguments));
+    }
+
+    /**
+     * Invokes the static method with the given name, parameter types and return type declared by class {@code owner}.
+     *
+     * @param owner     The class that declares the method
+     * @param name      The name of the method
+     * @param type      The type of the method
+     * @param arguments The arguments to use for the method invocation
+     * @return the value returned by the method, as an {@link Object}
+     */
+    public static Object invokeStatic(final @NotNull Class<?> owner, final @NotNull String name, final @NotNull MethodType type, final @Nullable Object... arguments) {
+        final MethodHandle handle = ThrowingExecutable.execute(
+                () -> Handles.findStatic(owner, name, type)
+        );
+
+        // Invoke the handle outside the lambda for clarity
+        return Handles.invoke(handle, arguments);
+    }
+
+    /**
      * Invokes a {@link MethodHandle} without forcing the caller of this method
      * to handle any {@link Throwable} {@code t} thrown by the invocation.
      *
