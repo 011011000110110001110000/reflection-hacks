@@ -1,5 +1,6 @@
 package reflection.hacks.internal.util;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import reflection.hacks.api.reflect.Classes;
 
@@ -22,8 +23,8 @@ public final class Throwables {
      * @see Throwables#sneakyThrow(Throwable)
      */
     @SuppressWarnings("unused")
-    public static void throwException(@NotNull Throwable t) {
-        Throwables.sneakyThrow(t);
+    public static void throwException(final @NotNull Throwable t) {
+        throw Throwables.sneakyThrow(t);
     }
 
     /**
@@ -37,10 +38,10 @@ public final class Throwables {
      */
     @SuppressWarnings("unused")
     @NotNull
-    public static RuntimeException wrapUnchecked(@NotNull Throwable t) {
+    public static RuntimeException wrapUnchecked(final @NotNull Throwable t) {
         Objects.requireNonNull(t, "throwable can't be null");
 
-        if (t instanceof RuntimeException re) {
+        if (t instanceof final RuntimeException re) {
             return re;
         }
 
@@ -58,9 +59,10 @@ public final class Throwables {
      * @throws T the given {@link Throwable} {@code t}
      * @apiNote This method will throw a {@link NullPointerException} if the supplied {@link Throwable} {@code t} is {@code null}
      */
+    @Contract(pure = true)
     @SuppressWarnings("unchecked")
     @NotNull
-    public static <T extends @NotNull Throwable> T sneakyThrow(@NotNull Throwable t) throws T {
+    public static <T extends @NotNull Throwable> T sneakyThrow(final @NotNull Throwable t) throws T {
         throw (T) t;
     }
 
