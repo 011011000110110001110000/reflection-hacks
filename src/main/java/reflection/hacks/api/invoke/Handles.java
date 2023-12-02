@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import reflection.hacks.api.reflect.Classes;
+import reflection.hacks.internal.util.Throwables;
 import reflection.hacks.internal.util.function.ThrowingExecutable;
 
 import java.lang.invoke.MethodHandle;
@@ -492,11 +493,11 @@ public final class Handles {
      * @return the value returned from the invocation of the given {@code handle}, cast to the appropriate type {@code T}
      */
     public static <T> T invoke(final @NotNull MethodHandle handle, final @Nullable Object... args) {
-        return Classes.unchecked(
-                ThrowingExecutable.execute(
-                        () -> handle.invokeWithArguments(args)
-                )
-        );
+        try {
+            return Classes.unchecked(handle.invokeWithArguments(args));
+        } catch (final Throwable t) {
+            throw Throwables.sneakyThrow(t);
+        }
     }
 
     /**
