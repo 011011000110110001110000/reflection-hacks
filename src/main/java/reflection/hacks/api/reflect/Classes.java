@@ -3,7 +3,6 @@ package reflection.hacks.api.reflect;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import reflection.hacks.api.invoke.Handles;
 import reflection.hacks.api.invoke.Lookups;
 import reflection.hacks.internal.util.function.ThrowingExecutable;
 
@@ -95,31 +94,7 @@ public final class Classes {
      * in implementations that choose to represent the bootstrap class loader with {@code null}.
      * In practice, most if not all JDK implementations will choose this approach, as the bootstrap class loader
      * should not be accessible by code outside the JDK implementation.
-     * It is therefore recommended to ensure that this method can never end up being called directly by a class loaded by the bootstrap class loader.
-     * <br>
-     * <br>
-     * If you really need to load a class by using the bootstrap class loader, you can get access to it by using the API provided
-     * by {@link Handles} to obtain a {@link java.lang.invoke.MethodHandle MethodHandle} to the internal {@link jdk.internal.loader.ClassLoaders#bootLoader()}
-     * method and then invoking the obtained handle, which will return the bootstrap class loader. You can then load the class by passing the
-     * bootstrap class loader instance to the {@link Classes#load(String, ClassLoader)} method.
-     * The following is an example of how the code may look like: <br>
-     * <blockquote><pre>
-     *     {@code
-     *     // Obtain a reference to the ClassLoaders and BuiltinClassLoader class objects while avoiding
-     *     // the need to break the jdk.internal.loader package's encapsulation altogether
-     *     Class<?> ClassLoaders = Class.forName("jdk.internal.loader.ClassLoaders");
-     *     Class<?> BuiltinClassLoader = Class.forName("jdk.internal.loader.BuiltinClassLoader");
-     *
-     *     // Obtain the handle to the bootLoader() method
-     *     MethodHandle bootLoader_MH = Handles.findStatic(ClassLoaders, "bootLoader", BuiltinClassLoader);
-     *
-     *     // Obtain the reference to the bootstrap class loader instance
-     *     ClassLoader bootstrapLoader = Handles.invoke(bootLoader_MH);
-     *
-     *     // Finally, load the class with the bootstrap class loader
-     *     Class<?> ToLoad = Classes.load("the.class.ToLoad", bootstrapLoader);
-     *     }
-     * </pre></blockquote>
+     * It is therefore necessary to ensure that this method can never end up being called directly by a class loaded by the bootstrap class loader.
      * @see Classes#load(String, ClassLoader)
      */
     @NotNull
