@@ -92,7 +92,8 @@ public final class JavaLangAccessBridge {
                             void.class,
                             Module.class,
                             String.class,
-                            Module.class)
+                            Module.class
+                    )
             ).bindTo(javaLangAccessInstance);
 
             ADD_EXPORTS_TO_ALL_UNNAMED_MODULES_MH = lookup.findVirtual(
@@ -101,7 +102,8 @@ public final class JavaLangAccessBridge {
                     MethodType.methodType(
                             void.class,
                             Module.class,
-                            String.class)
+                            String.class
+                    )
             ).bindTo(javaLangAccessInstance);
 
             ADD_EXPORTS_TO_ALL_MODULES_MH = lookup.findVirtual(
@@ -110,7 +112,8 @@ public final class JavaLangAccessBridge {
                     MethodType.methodType(
                             void.class,
                             Module.class,
-                            String.class)
+                            String.class
+                    )
             ).bindTo(javaLangAccessInstance);
 
             ADD_OPENS_TO_MODULE_MH = lookup.findVirtual(
@@ -120,7 +123,8 @@ public final class JavaLangAccessBridge {
                             void.class,
                             Module.class,
                             String.class,
-                            Module.class)
+                            Module.class
+                    )
             ).bindTo(javaLangAccessInstance);
 
             ADD_OPENS_TO_ALL_UNNAMED_MODULES_MH = lookup.findVirtual(
@@ -129,7 +133,8 @@ public final class JavaLangAccessBridge {
                     MethodType.methodType(
                             void.class,
                             Module.class,
-                            String.class)
+                            String.class
+                    )
             ).bindTo(javaLangAccessInstance);
 
             ADD_ENABLE_NATIVE_ACCESS_TO_MODULE_MH = lookup.findVirtual(
@@ -137,7 +142,8 @@ public final class JavaLangAccessBridge {
                     "addEnableNativeAccess",
                     MethodType.methodType(
                             Module.class,
-                            Module.class)
+                            Module.class
+                    )
             ).bindTo(javaLangAccessInstance);
         } catch (Throwable t) {
             throw Throwables.sneakyThrow(t);
