@@ -475,12 +475,7 @@ public final class Handles {
      * @return the value returned by the method, as an {@link Object}
      */
     public static Object invokeStatic(final @NotNull Class<?> owner, final @NotNull String name, final @NotNull MethodType type, final @Nullable Object... arguments) {
-        final MethodHandle handle = ThrowingExecutable.execute(
-                () -> Handles.findStatic(owner, name, type)
-        );
-
-        // Invoke the handle outside the lambda for clarity
-        return Handles.invoke(handle, arguments);
+        return Handles.invoke(Handles.findStatic(owner, name, type), arguments);
     }
 
     /**
