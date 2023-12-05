@@ -46,8 +46,10 @@ public final class Lookups {
 
     static {
 
+        final MethodHandles.Lookup lookup = MethodHandles.lookup();
+
         TRUSTED_ACCESS_MODES = -1;
-        FULL_PRIVILEGE_ACCESS_MODES = MethodHandles.lookup().lookupModes();
+        FULL_PRIVILEGE_ACCESS_MODES = lookup.lookupModes();
 
         // Enable AccessibleObject#setAccessible(boolean) usage on the MethodHandles.Lookup members
         JavaLangAccessBridge.addOpens(Object.class.getModule(), "java.lang.invoke", Lookups.class.getModule());
@@ -61,7 +63,7 @@ public final class Lookups {
                                     int.class
                             );
                     lookupConstructor.setAccessible(true);
-                    return MethodHandles.lookup().unreflectConstructor(lookupConstructor);
+                    return lookup.unreflectConstructor(lookupConstructor);
                 }
         );
 
