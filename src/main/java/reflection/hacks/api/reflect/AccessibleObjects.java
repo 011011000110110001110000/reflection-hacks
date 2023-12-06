@@ -114,7 +114,7 @@ public final class AccessibleObjects {
      * @see AccessibleObjects#setAccessible(boolean, AccessibleObject)
      */
     public static void setAccessible(final boolean accessible, final @NotNull AccessibleObject @NotNull ... objects) {
-        for (AccessibleObject object : objects) {
+        for (final AccessibleObject object : objects) {
             AccessibleObjects.setAccessible(accessible, object);
         }
     }
