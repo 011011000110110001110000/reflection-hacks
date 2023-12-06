@@ -254,7 +254,7 @@ public final class JavaLangAccessBridge {
 
             injectorLoader.defineAndLoad(Injector.generateIn(packageName));
 
-        } catch (ReflectiveOperationException roe) {
+        } catch (final ReflectiveOperationException roe) {
             throw new RuntimeException("Could not gain access to the jdk.internal.access package", roe);
         }
 
