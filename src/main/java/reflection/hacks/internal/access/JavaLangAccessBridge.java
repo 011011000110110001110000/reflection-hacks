@@ -245,7 +245,6 @@ public final class JavaLangAccessBridge {
 
             // noinspection SuspiciousInvocationHandlerImplementation
             final Object proxyInstance = Proxy.newProxyInstance(
-
                     injectorLoader,
                     interfaces,
                     (proxy, method, arguments) -> null
