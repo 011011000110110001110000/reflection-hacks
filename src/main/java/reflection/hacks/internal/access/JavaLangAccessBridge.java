@@ -144,7 +144,7 @@ public final class JavaLangAccessBridge {
                             Module.class
                     )
             ).bindTo(javaLangAccessInstance);
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             throw Throwables.sneakyThrow(t);
         }
 
