@@ -253,7 +253,7 @@ public final class JavaLangAccessBridge {
      *
      * @implNote This method exploits the fact that a proxy class must be able to access the interfaces that it implements.
      * More specifically, we generate a proxy class for the {@link jdk.internal.access.JavaLangAccess} interface, which is public
-     * but in a non-exported package inside the {@code java.base} module via {@link java.lang.reflect.Proxy#getProxyClass(ClassLoader, Class...)}.
+     * but in a non-exported package inside the {@code java.base} module, via {@link java.lang.reflect.Proxy#getProxyClass(ClassLoader, Class...)}.
      * To avoid access errors, the generated proxy class is put in a dynamic module, which is a runtime-generated named module that reads {@link jdk.internal.access},
      * and the {@code java.base} module is updated to export {@link jdk.internal.access} to the dynamic module.
      * For more information on dynamic modules, see the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Proxy.html#dynamicmodule"> Dynamic Modules section</a>
@@ -261,10 +261,10 @@ public final class JavaLangAccessBridge {
      * <p>
      * Once the dynamic module is defined to {@link reflection.hacks.internal.injector.Injector.Loader our ClassLoader}, we can retrieve the package
      * that {@link jdk.internal.access} was exported to by invoking {@link java.lang.Class#getPackageName()} on the generated proxy class.
-     * Once we know the package name, we can {@link reflection.hacks.internal.injector.Injector#generateIn(String) generate a class in the same package}
-     * and {@link reflection.hacks.internal.injector.Injector.Loader#defineAndLoad(byte[]) define it to our ClassLoader}.
+     * Once we know the package name, we can {@linkplain reflection.hacks.internal.injector.Injector#generateIn(String) generate a class in the same package}
+     * and {@linkplain reflection.hacks.internal.injector.Injector.Loader#defineAndLoad(byte[]) define it to our ClassLoader}.
      * The generated class will have access to the {@link jdk.internal.access.SharedSecrets} class, which allows us to obtain an instance of {@link jdk.internal.access.JavaLangAccess}.
-     * At this point we can just obtain {@link java.lang.invoke.MethodHandle MethodHandle}s for all the methods that we need and {@link java.lang.invoke.MethodHandle#bindTo(Object) bind them}
+     * At this point we can just obtain {@link java.lang.invoke.MethodHandle MethodHandle}s for all the methods that we need and {@linkplain java.lang.invoke.MethodHandle#bindTo(Object) bind them}
      * to the instance so they can be invoked by methods of this class as if they were handles for static methods.
      * </p>
      */
