@@ -2,7 +2,6 @@ package reflection.hacks.internal.access;
 
 import org.jetbrains.annotations.NotNull;
 import reflection.hacks.api.reflect.Classes;
-import reflection.hacks.api.reflect.Reflection;
 import reflection.hacks.internal.injector.Injector;
 import reflection.hacks.internal.util.Throwables;
 
@@ -12,7 +11,7 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Proxy;
 
 /**
- * Helper class that serves as a bridge between {@link Reflection} (and its internals) and {@link jdk.internal.access.JavaLangAccess}. <br>
+ * Helper class that serves as a bridge between {@link reflection.hacks.api.reflect.Modules} (and its internals) and {@link jdk.internal.access.JavaLangAccess}. <br>
  * The purpose of this class is to get rid of the need to export the {@link jdk.internal.access} package to this class' module via the {@code --add-exports}
  * argument at compile / run time.
  *
