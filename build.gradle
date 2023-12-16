@@ -55,6 +55,8 @@ test {
     useJUnitPlatform()
 }
 
+// The following code is most likely a crime and should not exist, but it does what I need it to do
+
 tasks.register('testSupportedVersions', Test) {
     group 'verification'
     doFirst {
