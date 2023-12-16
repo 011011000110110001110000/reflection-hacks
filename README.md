@@ -5,7 +5,7 @@ system, introduced in Java 9.
 
 ### Why does this exist, considering there are already many other libraries that do the same thing?
 
-This all started before I knew about those projects, and I was messing around with attaching Java Agent dynamically to
+This all started before I knew about those projects, and I was messing around with attaching Java Agents dynamically to
 running Java processes.
 I didn't actually need to worry about modules for what I was doing (and the Instrumentation API already provides a
 supported API for getting around module restrictions anyway),
