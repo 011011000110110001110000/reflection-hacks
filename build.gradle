@@ -113,6 +113,7 @@ vendors.forEach {
                     }
                 } catch (e) {
                     versionSpecificTask = tasks.register(taskName, Test) {
+                        group = LifecycleBasePlugin.VERIFICATION_GROUP
                         onlyIf {
                             println "Skipping tests on JDK ${majorVersion} for vendor ${jvmVendorSpec}:\n${e.message}"
                             false
