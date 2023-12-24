@@ -5,7 +5,7 @@
  * @since 1.0
  */
 module reflection.hacks.core {
-    requires org.jetbrains.annotations;
+    requires static org.jetbrains.annotations;
     requires org.objectweb.asm;
 
     exports reflection.hacks.api.invoke;
