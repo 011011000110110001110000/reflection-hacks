@@ -60,7 +60,7 @@ test {
 tasks.register('testSupportedVersions', Test) {
     group 'verification'
     doFirst {
-        println 'Running tests on all supported JDK versions'
+        println 'Running tests on all supported JDK versions and vendors'
     }
 }
 
@@ -68,14 +68,19 @@ LinkedHashMap<JvmVendorSpec, JvmImplementation> vendors = [:]
 
 vendors[JvmVendorSpec.ADOPTIUM] = JvmImplementation.VENDOR_SPECIFIC
 vendors[JvmVendorSpec.AMAZON] = JvmImplementation.VENDOR_SPECIFIC
+vendors[JvmVendorSpec.APPLE] = JvmImplementation.VENDOR_SPECIFIC
 vendors[JvmVendorSpec.AZUL] = JvmImplementation.VENDOR_SPECIFIC
 vendors[JvmVendorSpec.BELLSOFT] = JvmImplementation.VENDOR_SPECIFIC
+vendors[JvmVendorSpec.HEWLETT_PACKARD] = JvmImplementation.VENDOR_SPECIFIC
 vendors[JvmVendorSpec.IBM] = JvmImplementation.J9
 vendors[JvmVendorSpec.MICROSOFT] = JvmImplementation.VENDOR_SPECIFIC
 vendors[JvmVendorSpec.ORACLE] = JvmImplementation.VENDOR_SPECIFIC
 vendors[JvmVendorSpec.SAP] = JvmImplementation.VENDOR_SPECIFIC
 
-def versionRange = (17..21)
+def minSupportedVersion = 17
+def maxSupportedVersion = 22
+
+def versionRange = (minSupportedVersion..maxSupportedVersion)
 
 vendors.forEach {
     jvmVendorSpec, jvmImplementation ->
