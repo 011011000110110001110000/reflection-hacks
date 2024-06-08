@@ -160,7 +160,7 @@ public final class Fields {
      *         this method is independent from {@code owner}'s cached reflection data
      *     </li>
      *     <li>
-     *         the returned field will be a {@linkplain Field#getRoot()} root Field}
+     *         the returned field will be a {@linkplain Field#getRoot() root Field}
      *      </li>
      * </ul>
      *
@@ -187,7 +187,7 @@ public final class Fields {
      *         this method is independent from {@code owner}'s cached reflection data
      *     </li>
      *     <li>
-     *         the returned field will be a {@linkplain Field#getRoot()} root Field}
+     *         the returned field will be a {@linkplain Field#getRoot() root Field}
      *      </li>
      * </ul>
      *

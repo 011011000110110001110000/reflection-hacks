@@ -174,7 +174,7 @@ public final class Methods {
      *         this method is independent from {@code owner}'s cached reflection data
      *     </li>
      *     <li>
-     *         the returned method will be a {@linkplain Method#getRoot()} root Method}
+     *         the returned method will be a {@linkplain Method#getRoot() root Method}
      *      </li>
      * </ul>
      *
@@ -202,7 +202,7 @@ public final class Methods {
      *         this method is independent from {@code owner}'s cached reflection data
      *     </li>
      *     <li>
-     *         the returned method will be a {@linkplain Method#getRoot()} root Method}
+     *         the returned method will be a {@linkplain Method#getRoot() root Method}
      *      </li>
      * </ul>
      *
@@ -323,7 +323,7 @@ public final class Methods {
      *         this method is independent from {@code owner}'s cached reflection data
      *     </li>
      *     <li>
-     *         the returned array will contain {@linkplain Method#getRoot()} root Methods}
+     *         the returned array will contain {@linkplain Method#getRoot() root Methods}
      *      </li>
      * </ul>
      *
@@ -348,7 +348,7 @@ public final class Methods {
      *         this method is independent from {@code owner}'s cached reflection data
      *     </li>
      *     <li>
-     *         the returned array will contain {@linkplain Method#getRoot()} root Methods}
+     *         the returned array will contain {@linkplain Method#getRoot() root Methods}
      *      </li>
      * </ul>
      *
@@ -372,7 +372,7 @@ public final class Methods {
      *         this method is independent from {@code owner}'s cached reflection data
      *     </li>
      *     <li>
-     *         the returned array will contain {@linkplain Method#getRoot()} root Methods}
+     *         the returned array will contain {@linkplain Method#getRoot() root Methods}
      *      </li>
      * </ul>
      *
@@ -399,7 +399,7 @@ public final class Methods {
      *         this method is independent from {@code owner}'s cached reflection data
      *     </li>
      *     <li>
-     *         the returned array will contain {@linkplain Method#getRoot()} root Methods}
+     *         the returned array will contain {@linkplain Method#getRoot() root Methods}
      *      </li>
      * </ul>
      *
