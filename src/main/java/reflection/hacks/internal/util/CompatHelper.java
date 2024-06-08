@@ -74,7 +74,7 @@ public class CompatHelper {
                 nativeGetDeclaredFields_MH = Handles.findVirtual(Class.class, "getDeclaredFieldsImpl", Field[].class);
                 nativeGetDeclaredMethods_MH = Handles.findVirtual(Class.class, "getDeclaredMethodsImpl", Method[].class);
             }
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             throw Throwables.sneakyThrow(t);
         }
 
