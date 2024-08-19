@@ -3,9 +3,12 @@ package reflection.hacks.api.reflect;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import reflection.hacks.api.invoke.Handles;
 import reflection.hacks.api.invoke.Lookups;
 import reflection.hacks.internal.util.function.ThrowingExecutable;
 
+import java.lang.invoke.MethodHandle;
+import java.security.ProtectionDomain;
 import java.util.Optional;
 
 /**
@@ -16,6 +19,12 @@ import java.util.Optional;
  * @since 1.0
  */
 public final class Classes {
+
+    private static final MethodHandle DEFINE_CLASS_MH;
+
+    static {
+        DEFINE_CLASS_MH = Handles.findVirtual(ClassLoader.class, "defineClass", Class.class, String.class, byte[].class, int.class, int.class, ProtectionDomain.class);
+    }
 
     /**
      * Ensures the specified classes are initialized.
@@ -82,6 +91,16 @@ public final class Classes {
     @SuppressWarnings("unchecked")
     public static <T extends @Nullable Object> T unchecked(final @Nullable Object o) {
         return (T) o;
+    }
+
+    public static Class<?> define(final ClassLoader loader, final String className, final byte[] classRep, final int offset, final int length) {
+        return Classes.define(loader, className, classRep, offset, length, null);
+    }
+
+    public static Class<?> define(final ClassLoader loader, final String className, final byte[] classRep, final int offset, final int length, final ProtectionDomain protectionDomain) {
+        return ThrowingExecutable.execute(
+                () -> (Class<?>) Classes.DEFINE_CLASS_MH.invokeExact(loader, className, classRep, offset, length, protectionDomain)
+        );
     }
 
     /**
