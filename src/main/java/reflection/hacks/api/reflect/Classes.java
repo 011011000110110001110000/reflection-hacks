@@ -13,7 +13,7 @@ import java.security.ProtectionDomain;
 import java.util.Optional;
 
 /**
- * This class provides an API to deal with enumeration and loading of classes, as well as other miscellaneous operations on {@link Class} objects.
+ * This class provides an API to deal with enumeration, definition and loading of classes, as well as other miscellaneous operations on {@link Class} objects.
  *
  * @author <a href=https://github.com/011011000110110001110000>011011000110110001110000</a>
  * @version 1.0
@@ -94,13 +94,39 @@ public final class Classes {
         return (T) o;
     }
 
-    public static Class<?> define(final ClassLoader loader, final String className, final byte[] classRep, final int offset, final int length) {
-        return Classes.define(loader, className, classRep, offset, length, null);
+    /**
+     * Constructs a new class from an array of bytes containing a
+     * class definition in class file format with the given loader.
+     *
+     * @param className  the name of the new class
+     * @param classBytes a memory image of a class file
+     * @param offset     the offset into the classBytes
+     * @param length     the length of the class file
+     * @return the newly defined {@link Class}
+     * @see ClassLoader#defineClass(String, byte[], int, int)
+     */
+    @NotNull
+    public static Class<?> define(final @NotNull ClassLoader loader, final @Nullable String className, final byte @NotNull [] classBytes, final int offset, final int length) {
+        return Classes.define(loader, className, classBytes, offset, length, null);
     }
 
-    public static Class<?> define(final ClassLoader loader, final String className, final byte[] classRep, final int offset, final int length, final ProtectionDomain protectionDomain) {
+    /**
+     * Constructs a new class from an array of bytes containing a
+     * class definition in class file format with the given loader
+     * and assigns the new class to the specified protection domain.
+     *
+     * @param className        the name of the new class
+     * @param classBytes       a memory image of a class file
+     * @param offset           the offset into the classBytes
+     * @param length           the length of the class file
+     * @param protectionDomain the protection domain that the class should belong to
+     * @return the newly defined {@link Class}
+     * @see ClassLoader#defineClass(String, byte[], int, int, ProtectionDomain)
+     */
+    @NotNull
+    public static Class<?> define(final @NotNull ClassLoader loader, final @Nullable String className, final byte @NotNull [] classBytes, final int offset, final int length, final @Nullable ProtectionDomain protectionDomain) {
         return ThrowingExecutable.execute(
-                () -> (Class<?>) Classes.DEFINE_CLASS_MH.get().invokeExact(loader, className, classRep, offset, length, protectionDomain)
+                () -> (Class<?>) Classes.DEFINE_CLASS_MH.get().invokeExact(loader, className, classBytes, offset, length, protectionDomain)
         );
     }
 
