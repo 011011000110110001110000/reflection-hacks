@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import reflection.hacks.api.invoke.Lookups;
 import reflection.hacks.internal.util.function.ThrowingExecutable;
 
+import java.util.Optional;
+
 /**
  * This class provides an API to deal with enumeration and loading of classes, as well as other miscellaneous operations on {@link Class} objects.
  *
@@ -99,7 +101,29 @@ public final class Classes {
      */
     @NotNull
     public static <T> Class<T> load(final @NotNull String name) {
-        return load(name, Reflection.STACK_WALKER.getCallerClass().getClassLoader());
+        return Classes.load(name, Reflection.STACK_WALKER.getCallerClass().getClassLoader());
+    }
+
+    /**
+     * Attempts to load the class with the given name using the caller's class loader.
+     *
+     * @param name The binary name of the class
+     * @param <T>  The type of the class modeled by the {@link Class} with the given {@code name}
+     * @return an {@link Optional} instance containing the loaded class if found
+     * @apiNote As specified in the documentation for {@link Class#getClassLoader()}, {@code null} may be
+     * used to represent the bootstrap class loader. However, {@link Classes#tryLoad(String, ClassLoader)} expects
+     * the supplied {@link ClassLoader} to be not-{@code null}. Because of this, the result of invoking this
+     * method from a class loaded by the bootstrap class loader will be the throwing of a {@link NullPointerException}
+     * in implementations that choose to represent the bootstrap class loader with {@code null}.
+     * In practice, most if not all JDK implementations will choose this approach, as the bootstrap class loader
+     * should not be accessible by code outside the JDK implementation.
+     * It is therefore necessary to ensure that this method can never end up being called directly by a class loaded by the bootstrap class loader.
+     * @see Classes#load(String)
+     * @see Classes#tryLoad(String, ClassLoader)
+     */
+    @NotNull
+    public static <T> Optional<Class<T>> tryLoad(final @NotNull String name) {
+        return Classes.tryLoad(name, Reflection.STACK_WALKER.getCallerClass().getClassLoader());
     }
 
     /**
@@ -113,7 +137,21 @@ public final class Classes {
      */
     @NotNull
     public static <T> Class<T> loadWithSystemLoader(final @NotNull String name) {
-        return load(name, ClassLoader.getSystemClassLoader());
+        return Classes.load(name, ClassLoader.getSystemClassLoader());
+    }
+
+    /**
+     * Attempts to load the class with the given name using the system class loader.
+     *
+     * @param name The binary name of the class
+     * @param <T>  The type of the class modeled by the {@link Class} with the given {@code name}
+     * @return an {@link Optional} instance containing the loaded class if found
+     * @see Classes#load(String, ClassLoader)
+     * @see ClassLoader#getSystemClassLoader()
+     */
+    @NotNull
+    public static <T> Optional<Class<T>> tryLoadWithSystemLoader(final @NotNull String name) {
+        return Classes.tryLoad(name, ClassLoader.getSystemClassLoader());
     }
 
     /**
@@ -127,7 +165,21 @@ public final class Classes {
      */
     @NotNull
     public static <T> Class<T> loadWithPlatformLoader(final @NotNull String name) {
-        return load(name, ClassLoader.getPlatformClassLoader());
+        return Classes.load(name, ClassLoader.getPlatformClassLoader());
+    }
+
+    /**
+     * Attempts to load the class with the given name using the platform class loader.
+     *
+     * @param name The binary name of the class
+     * @param <T>  The type of the class modeled by the {@link Class} with the given {@code name}
+     * @return an {@link Optional} instance containing the loaded class if found
+     * @see Classes#load(String, ClassLoader)
+     * @see ClassLoader#getPlatformClassLoader()
+     */
+    @NotNull
+    public static <T> Optional<Class<T>> tryLoadWithPlatformLoader(final @NotNull String name) {
+        return Classes.tryLoad(name, ClassLoader.getPlatformClassLoader());
     }
 
     /**
@@ -148,6 +200,24 @@ public final class Classes {
                         () -> loader.loadClass(name)
                 )
         );
+    }
+
+    /**
+     * Attempts to load the class with the given binary name using the given {@link ClassLoader}.
+     *
+     * @param name   The binary name of the class
+     * @param loader The class loader to use for loading the class
+     * @param <T>    The type of the class modeled by the {@link Class} with the given {@code name}
+     * @return an {@link Optional} instance containing the loaded class if found
+     * @see ClassLoader#loadClass(String)
+     */
+    @NotNull
+    public static <T> Optional<Class<T>> tryLoad(final @NotNull String name, final @NotNull ClassLoader loader) {
+        try {
+            return Optional.of(Classes.unchecked(loader.loadClass(name)));
+        } catch (final ClassNotFoundException cnfe) {
+            return Optional.empty();
+        }
     }
 
     /**
