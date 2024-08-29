@@ -98,6 +98,19 @@ public final class Classes {
      * Constructs a new class from an array of bytes containing a
      * class definition in class file format with the given loader.
      *
+     * @param classBytes a memory image of a class file
+     * @return the newly defined {@link Class}
+     * @see Classes#define(ClassLoader, String, byte[], int, int)
+     */
+    public static Class<?> define(final @NotNull ClassLoader loader, final byte @NotNull [] classBytes) {
+        return Classes.define(loader, null, classBytes, 0, classBytes.length);
+    }
+
+    /**
+     * Constructs a new class from an array of bytes containing a
+     * class definition in class file format with the given loader.
+     *
+     * @param loader     the {@link ClassLoader} that will be used to define the class
      * @param className  the name of the new class
      * @param classBytes a memory image of a class file
      * @param offset     the offset into the classBytes
@@ -115,6 +128,7 @@ public final class Classes {
      * class definition in class file format with the given loader
      * and assigns the new class to the specified protection domain.
      *
+     * @param loader           the {@link ClassLoader} that will be used to define the class
      * @param className        the name of the new class
      * @param classBytes       a memory image of a class file
      * @param offset           the offset into the classBytes
