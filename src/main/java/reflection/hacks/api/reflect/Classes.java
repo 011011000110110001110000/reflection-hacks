@@ -21,10 +21,19 @@ import java.util.Optional;
  */
 public final class Classes {
 
+    /**
+     * Lazily cached {@link MethodHandle} for {@link ClassLoader#defineClass(String, byte[], int, int, ProtectionDomain)}.
+     *
+     * @see Classes#define(ClassLoader, byte[])
+     * @see Classes#define(ClassLoader, String, byte[], int, int)
+     * @see Classes#define(ClassLoader, String, byte[], int, int, ProtectionDomain)
+     */
     private static final Lazy<MethodHandle> DEFINE_CLASS_MH;
 
     static {
+
         DEFINE_CLASS_MH = Lazy.of(() -> Handles.findVirtual(ClassLoader.class, "defineClass", Class.class, String.class, byte[].class, int.class, int.class, ProtectionDomain.class));
+
     }
 
     /**
