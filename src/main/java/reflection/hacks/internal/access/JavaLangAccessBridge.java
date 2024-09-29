@@ -240,7 +240,7 @@ public final class JavaLangAccessBridge {
      */
     public static void addEnableNativeAccess(final @NotNull Module m) {
         try {
-            JavaLangAccessBridge.ADD_ENABLE_NATIVE_ACCESS_TO_MODULE_MH.invokeExact(m);
+            final Module unused = (Module) JavaLangAccessBridge.ADD_ENABLE_NATIVE_ACCESS_TO_MODULE_MH.invokeExact(m);
         } catch (final Throwable t) {
             throw Throwables.sneakyThrow(t);
         }
