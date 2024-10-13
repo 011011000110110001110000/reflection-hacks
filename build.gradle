@@ -78,7 +78,7 @@ vendors[JvmVendorSpec.ORACLE] = JvmImplementation.VENDOR_SPECIFIC
 vendors[JvmVendorSpec.SAP] = JvmImplementation.VENDOR_SPECIFIC
 
 def minSupportedVersion = 17
-def maxSupportedVersion = 22
+def maxSupportedVersion = 23
 
 def versionRange = (minSupportedVersion..maxSupportedVersion)
 
