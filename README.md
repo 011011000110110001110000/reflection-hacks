@@ -39,6 +39,20 @@ All vendors for which this has been tested can be found in the build.gradle scri
 
 Most likely not, since Java provides supported APIs for doing (almost) everything this project can do, be it via a Java
 Agent, with specific command-line arguments or even by just having client code open its packages to your module.
+
 However, if you find yourself in a situation where you need to use reflection and the options described above are not
 available, then this library might just be what you need. Moreover, if for some reason you don't have
 access to sun.misc.Unsafe, as already mentioned this library will still work, unlike all the others that I've seen.
+
+The only notable exception I'm aware of is [xxDark's Deencapsulation2](https://github.com/xxDark/Deencapsulation2), 
+which instead relies on the API exposed by the sun.misc.ReflectionFactory class, which allows anyone who can get 
+an instance of it to instantiate any class with any of its declared constructors. 
+
+Just like the libraries which leverage sun.misc.Unsafe, this is a much simpler approach compared to what this library 
+does, although it only exposes two methods, one which allows the user to obtain an instance of MethodHandles.Lookup 
+with full privilege access in an arbitrary lookup class and the other which, given an arbitrary class, will open all 
+packages of modules defined in the same module layer as the class and all packages defined in the boot layer to all 
+other modules, so the user will have to implement more complex stuff on their own.
+
+That being said, the sun.misc.ReflectionFactory class is also located in the jdk.unsupported module 
+together with sun.misc.Unsafe , so xxDark's approach will only work if the module is available.
