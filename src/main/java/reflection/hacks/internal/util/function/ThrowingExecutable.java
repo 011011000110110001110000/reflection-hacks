@@ -27,14 +27,13 @@ public interface ThrowingExecutable<T extends @Nullable Object> {
     @Nullable T execute() throws Throwable;
 
     /**
-     * Executes the given {@link ThrowingExecutable} {@code executable} and returns the non-null value produced by the execution,
+     * Executes the given {@link ThrowingExecutable} {@code executable} and returns the value produced by the execution,
      * re-throwing any {@link Throwable} {@code t} thrown by {@code executable} without forcing the caller of this method to handle it,
      * even if {@code t} is a checked exception.
      *
      * @param executable The {@link ThrowingExecutable} to execute
      * @param <T>        The type of the value returned by the {@code executable}
      * @return the value returned from the {@code executable}'s {@link ThrowingExecutable#execute() execute()} method
-     * @throws NullPointerException if the value returned by {@code executable} is {@code null}
      */
     static <T> T execute(final @NotNull ThrowingExecutable<T> executable) {
         try {
