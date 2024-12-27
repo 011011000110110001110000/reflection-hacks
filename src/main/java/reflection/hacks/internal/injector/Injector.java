@@ -65,38 +65,6 @@ public final class Injector {
                 null
         );
 
-        // Default constructor bytecode (<init>()V)
-        {
-            methodVisitor = classWriter.visitMethod(
-                    Opcodes.ACC_PUBLIC,
-                    "<init>",
-                    "()V",
-                    null,
-                    null
-            );
-
-            methodVisitor.visitCode();
-
-            methodVisitor.visitVarInsn(
-                    Opcodes.ALOAD,
-                    0
-            );
-            methodVisitor.visitMethodInsn(
-                    Opcodes.INVOKESPECIAL,
-                    "java/lang/Object",
-                    "<init>",
-                    "()V",
-                    false
-            );
-            methodVisitor.visitInsn(
-                    Opcodes.RETURN
-            );
-
-            methodVisitor.visitMaxs(1, 1);
-
-            methodVisitor.visitEnd();
-        }
-
         // Static class initializer bytecode (<clinit>()V)
         {
             methodVisitor = classWriter.visitMethod(
