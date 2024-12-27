@@ -54,7 +54,6 @@ public final class Injector {
         final String injectorClassDescriptor = "L" + fullInjectedClassName + ";";
 
         final ClassWriter classWriter = new ClassWriter(0);
-        MethodVisitor methodVisitor;
 
         classWriter.visit(
                 Opcodes.V17,
@@ -67,7 +66,7 @@ public final class Injector {
 
         // Static class initializer bytecode (<clinit>()V)
         {
-            methodVisitor = classWriter.visitMethod(
+            final MethodVisitor clinitVisitor = classWriter.visitMethod(
                     Opcodes.ACC_STATIC,
                     "<clinit>",
                     "()V",
@@ -75,105 +74,105 @@ public final class Injector {
                     null
             );
 
-            methodVisitor.visitCode();
+            clinitVisitor.visitCode();
 
-            methodVisitor.visitLdcInsn(
+            clinitVisitor.visitLdcInsn(
                     Type.getType(injectorClassDescriptor)
             );
-            methodVisitor.visitVarInsn(
+            clinitVisitor.visitVarInsn(
                     Opcodes.ASTORE,
                     0
             );
-            methodVisitor.visitVarInsn(
+            clinitVisitor.visitVarInsn(
                     Opcodes.ALOAD,
                     0
             );
-            methodVisitor.visitMethodInsn(
+            clinitVisitor.visitMethodInsn(
                     Opcodes.INVOKEVIRTUAL,
                     "java/lang/Class",
                     "getClassLoader",
                     "()Ljava/lang/ClassLoader;",
                     false
             );
-            methodVisitor.visitMethodInsn(
+            clinitVisitor.visitMethodInsn(
                     Opcodes.INVOKEVIRTUAL,
                     "java/lang/Object",
                     "getClass",
                     "()Ljava/lang/Class;",
                     false
             );
-            methodVisitor.visitVarInsn(
+            clinitVisitor.visitVarInsn(
                     Opcodes.ASTORE, 1
             );
-            methodVisitor.visitLdcInsn(
+            clinitVisitor.visitLdcInsn(
                     Type.getType("Ljava/lang/Object;")
             );
-            methodVisitor.visitMethodInsn(
+            clinitVisitor.visitMethodInsn(
                     Opcodes.INVOKEVIRTUAL,
                     "java/lang/Class",
                     "getModule",
                     "()Ljava/lang/Module;",
                     false
             );
-            methodVisitor.visitVarInsn(
+            clinitVisitor.visitVarInsn(
                     Opcodes.ASTORE,
                     2
             );
-            methodVisitor.visitVarInsn(
+            clinitVisitor.visitVarInsn(
                     Opcodes.ALOAD,
                     1
             );
-            methodVisitor.visitMethodInsn(
+            clinitVisitor.visitMethodInsn(
                     Opcodes.INVOKEVIRTUAL,
                     "java/lang/Class",
                     "getModule",
                     "()Ljava/lang/Module;",
                     false
             );
-            methodVisitor.visitVarInsn(
+            clinitVisitor.visitVarInsn(
                     Opcodes.ASTORE,
                     3
             );
 
-            methodVisitor.visitMethodInsn(
+            clinitVisitor.visitMethodInsn(
                     Opcodes.INVOKESTATIC,
                     "jdk/internal/access/SharedSecrets",
                     "getJavaLangAccess",
                     "()Ljdk/internal/access/JavaLangAccess;",
                     false
             );
-            methodVisitor.visitVarInsn(
+            clinitVisitor.visitVarInsn(
                     Opcodes.ASTORE,
                     4
             );
-            methodVisitor.visitVarInsn(
+            clinitVisitor.visitVarInsn(
                     Opcodes.ALOAD,
                     4
             );
-            methodVisitor.visitVarInsn(
+            clinitVisitor.visitVarInsn(
                     Opcodes.ALOAD,
                     2
             );
-            methodVisitor.visitLdcInsn(
+            clinitVisitor.visitLdcInsn(
                     "jdk.internal.access"
             );
-            methodVisitor.visitVarInsn(
+            clinitVisitor.visitVarInsn(
                     Opcodes.ALOAD,
                     3
             );
-            methodVisitor.visitMethodInsn(
+            clinitVisitor.visitMethodInsn(
                     Opcodes.INVOKEINTERFACE,
                     "jdk/internal/access/JavaLangAccess",
                     "addExports",
                     "(Ljava/lang/Module;Ljava/lang/String;Ljava/lang/Module;)V",
                     true
             );
-            methodVisitor.visitInsn(
+            clinitVisitor.visitInsn(
                     Opcodes.RETURN
             );
 
-            methodVisitor.visitMaxs(4, 5);
-            methodVisitor.visitEnd();
+            clinitVisitor.visitMaxs(4, 5);
+            clinitVisitor.visitEnd();
         }
 
         classWriter.visitEnd();
