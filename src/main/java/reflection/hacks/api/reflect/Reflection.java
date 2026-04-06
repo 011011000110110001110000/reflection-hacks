@@ -6,6 +6,7 @@ import reflection.hacks.internal.util.CompatHelper;
 import reflection.hacks.internal.util.Lazy;
 import reflection.hacks.internal.util.function.ThrowingExecutable;
 
+import java.lang.invoke.MethodHandle;
 import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -51,7 +52,10 @@ public final class Reflection {
 
     static {
 
-        STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+        final Class<?> LiveStackFrame = Classes.load("java.lang.LiveStackFrame");
+        final MethodHandle getStackWalker_MH = Handles.findStatic(LiveStackFrame, "getStackWalker", StackWalker.class, Set.class);
+
+        STACK_WALKER = Handles.invoke(getStackWalker_MH, Set.of(StackWalker.Option.RETAIN_CLASS_REFERENCE));
 
         REFLECTION_CACHE = Lazy.of(CompatHelper::reflectionCacheHandle);
 
