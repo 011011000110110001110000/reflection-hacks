@@ -52,7 +52,7 @@ public final class Reflection {
 
     static {
 
-        final Class<?> LiveStackFrame = Classes.load("java.lang.LiveStackFrame");
+        final Class<?> LiveStackFrame = Classes.loadWithSystemLoader("java.lang.LiveStackFrame");
         final MethodHandle getStackWalker_MH = Handles.findStatic(LiveStackFrame, "getStackWalker", StackWalker.class, Set.class);
 
         STACK_WALKER = Handles.invoke(getStackWalker_MH, Set.of(StackWalker.Option.RETAIN_CLASS_REFERENCE));
