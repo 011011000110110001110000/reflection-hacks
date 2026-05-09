@@ -30,6 +30,12 @@ public final class Reflection {
     public static final StackWalker STACK_WALKER;
 
     /**
+     * Cached {@link StackWalker} instance that collects {@link LiveStackFrame}s.
+     * @apiNote This instance cannot be used for caller checking purposes
+     */
+    public static final StackWalker LIVE_STACK_WALKER;
+
+    /**
      * Lazily cached {@link VarHandle} for the cached reflection data of a {@link Class}
      *
      * @see #clearReflectionCache(Class)
@@ -55,7 +61,8 @@ public final class Reflection {
         final Class<?> LiveStackFrame = Classes.loadWithSystemLoader("java.lang.LiveStackFrame");
         final MethodHandle getStackWalker_MH = Handles.findStatic(LiveStackFrame, "getStackWalker", StackWalker.class, Set.class);
 
-        STACK_WALKER = Handles.invoke(getStackWalker_MH, Set.of(StackWalker.Option.RETAIN_CLASS_REFERENCE));
+        LIVE_STACK_WALKER = Handles.invoke(getStackWalker_MH, Set.of(StackWalker.Option.RETAIN_CLASS_REFERENCE));
+        STACK_WALKER = StackWalker.getInstance(Set.of(StackWalker.Option.RETAIN_CLASS_REFERENCE));
 
         REFLECTION_CACHE = Lazy.of(CompatHelper::reflectionCacheHandle);
 
